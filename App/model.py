@@ -111,7 +111,13 @@ def newAreaEntry(crime):
     Crea una entrada para el indice de areas reportadas
     """
     # TODO lab 9, crear una entrada para el indice de areas reportadas
-    entry = {"lstcrimes": None, }
+    entry = {'area_Index': None, "lstcrimes": None}
+    
+    entry["area_Index"] = m.newMap(numelements=30,
+                                     maptype="PROBING",
+                                     cmpfunction=compareOffenses)
+    entry["lstcrimes"] = lt.newList("SINGLE_LINKED", compareDates)
+    lt.addLast(entry["lstcrimes"], crime)
     return entry
 
 
@@ -120,14 +126,17 @@ def addAreaIndex(area_entry, crime):
     Adiciona un crimen a la lista de crimenes de un area
     """
     # TODO lab 9, adicionar crimen a la lista de crimenes de un area
-    entry = crime["REPORTING_AREA"]
-    if entry is None or entry == " " or entry =='':
-        datentry = newAreaEntry(crime)
-        om.put(map, entry, datentry)
+    lst = area_entry["lstcrimes"]
+    lt.addLast(lst, crime)
+    offenseIndex = area_entry["area_Index"]
+    offentry = m.get(offenseIndex, crime["OFFENSE_CODE_GROUP"])
+    if (offentry is None):
+        entry = newOffenseEntry(crime["OFFENSE_CODE_GROUP"], crime)
+        lt.addLast(entry["lstoffenses"], crime)
+        m.put(offenseIndex, crime["OFFENSE_CODE_GROUP"], entry)
     else:
-        datentry = me.getValue(entry)
-    addDateIndex(datentry, crime)
-    return map
+        entry = me.getValue(offentry)
+        lt.addLast(entry["lstoffenses"], crime)
     return area_entry
 
 
@@ -244,7 +253,7 @@ def indexHeightAreas(analyzer):
     Altura del arbol por areas
     """
     # TODO lab 9, leer la altura del arbol por areas
-    pass
+    return om.height(analyzer['areaIndex'])
 
 
 def indexSizeAreas(analyzer):
@@ -252,7 +261,7 @@ def indexSizeAreas(analyzer):
     Numero de elementos en el indice por areas
     """
     # TODO lab 9, leer el numero de elementos en el indice por areas
-    pass
+    return om.size(analyzer['areaIndex'])
 
 
 def minKeyAreas(analyzer):
@@ -260,7 +269,7 @@ def minKeyAreas(analyzer):
     Llave mas pequena por areas
     """
     # TODO lab 9, leer la llave mas pequena por areas
-    pass
+    return om.minKey(analyzer['areaIndex'])
 
 
 def maxKeyAreas(analyzer):
@@ -268,7 +277,7 @@ def maxKeyAreas(analyzer):
     Llave mas grande por areas
     """
     # TODO lab 9, leer la llave mas grande por areas
-    pass
+    return om.maxKey(analyzer['areaIndex'])
 
 
 def getCrimesByRangeArea(analyzer, initialArea, finalArea):
