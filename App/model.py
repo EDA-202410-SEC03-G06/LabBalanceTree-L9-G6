@@ -88,12 +88,21 @@ def updateAreaIndex(map, crime):
     y si el area son ["", " ", None] se utiliza el valor por defecto 9999
     """
     # TODO lab 9, implementar actualizacion del indice por areas reportadas
+    area = crime['REPORTING_AREA']
+    
     # revisar si el area es un str vacio ["", " ", None]
+    if  area is None or area == " " or area == "":
     # area desconocida es 9999
-
+        area = 9999  
     # revisar si el area ya esta en el indice
-
+    entry = om.get(map, area)
+    if entry is None:
+        areaEntry = newAreaEntry(area)
+        om.put(map, area, areaEntry)
     # si el area ya esta en el indice, adicionar el crimen a la lista
+    else:
+        areaEntry = me.getValue(entry)
+    addAreaIndex(areaEntry, crime)
     return map
 
 
@@ -114,7 +123,7 @@ def addAreaIndex(area_entry, crime):
     entry = crime["REPORTING_AREA"]
     if entry is None or entry == " " or entry =='':
         datentry = newAreaEntry(crime)
-        om.put(map, crimedate.date(), datentry)
+        om.put(map, entry, datentry)
     else:
         datentry = me.getValue(entry)
     addDateIndex(datentry, crime)
