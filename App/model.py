@@ -89,18 +89,19 @@ def updateAreaIndex(map, crime):
     """
     # TODO lab 9, implementar actualizacion del indice por areas reportadas
     area = crime['REPORTING_AREA']
-    
     # revisar si el area es un str vacio ["", " ", None]
-    if  area is None or area == " " or area == "":
+    if  area == None or area == " " or area == "":
     # area desconocida es 9999
-        area = 9999  
+        areaKey = 9999  
     # revisar si el area ya esta en el indice
-    entry = om.get(map, area)
+    else: 
+        areaKey = area
+    entry = om.get(map, areaKey)
     if entry is None:
-        areaEntry = newAreaEntry(area)
-        om.put(map, area, areaEntry)
+        areaEntry = newAreaEntry(areaKey)
+        om.put(map, areaKey, areaEntry)
     # si el area ya esta en el indice, adicionar el crimen a la lista
-    else:
+    else:   
         areaEntry = me.getValue(entry)
     addAreaIndex(areaEntry, crime)
     return map
