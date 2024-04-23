@@ -60,7 +60,7 @@ def newAnalyzer():
     analyzer["crimes"] = lt.newList("SINGLE_LINKED", compareIds)
     analyzer["dateIndex"] = om.newMap(omaptype="RBT",
                                       cmpfunction=compareDates)
-    analyzer['reported_area'] = om.newMap(omaptype="RBT",
+    analyzer['areaIndex'] = om.newMap(omaptype="RBT",
                                       cmpfunction=compareDates)
     # TODO lab 9, crear el indice ordenado por areas reportadas
     return analyzer
@@ -76,7 +76,7 @@ def addCrime(analyzer, crime):
     lt.addLast(analyzer["crimes"], crime)
     updateDateIndex(analyzer["dateIndex"], crime)
     # TODO lab 9, actualizar el indice por areas reportadas
-    updateAreaIndex(analyzer['reported_area'], crime)
+    updateAreaIndex(analyzer['areaIndex'], crime)
     return analyzer
 
 
@@ -285,7 +285,10 @@ def getCrimesByRangeArea(analyzer, initialArea, finalArea):
     Retorna el numero de crimenes en un rango de areas
     """
     # TODO lab 9, completar la consulta de crimenes por rango de areas
+    lst = om.values(analyzer['areaIndex'], initialArea, finalArea)
     totalcrimes = 0
+    for lstarea in lt.iterator(lst):
+        totalcrimes+= lt.size(lstarea['lstcrimes'])
     return totalcrimes
 
 

@@ -79,10 +79,10 @@ while True:
         print("Menor Llave: " + str(controller.minKey(cont)))
         print("Mayor Llave: " + str(controller.maxKey(cont)))
         # TODO lab 9, imprimir las propiedades del indice de areas
-        print("Altura del arbol de areas: ")
-        print("Elementos en el arbol de areas: ")
-        print("Menor llave de areas: ")
-        print("Mayor llave de areas: ")
+        print("Altura del arbol de areas: "+ str(controller.indexHeightAreas(cont)))
+        print("Elementos en el arbol de areas: "+ str(controller.indexSizeAreas(cont)))
+        print("Menor llave de areas: " + str(controller.minKeyAreas(cont)))
+        print("Mayor llave de areas: " + str(controller.maxKeyAreas(cont)))
         # propiedades: altura, elementos y llaves min y max
 
     elif int(inputs[0]) == 3:
@@ -106,7 +106,9 @@ while True:
         print("\nBuscando crimenes en un rango de areas: ")
         print("Las areas estan numeradas con enteros (1 - 962)")
         print("Un area desconocida tiene el el numero 9999")
-
+        initialArea = int(input("Escriba el area inicial: "))
+        finalArea = int(input('Escriba el area final: '))
+        controller.getCrimesByRangeArea(cont, initialArea, finalArea)
     else:
         sys.exit(0)
 sys.exit(0)
